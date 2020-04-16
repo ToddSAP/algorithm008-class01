@@ -1,4 +1,4 @@
-package _283;
+package Week_01.move_zeros;
 
 import org.junit.Assert;
 import org.junit.Test;

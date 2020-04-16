@@ -1,4 +1,4 @@
-package _1;
+package Week_01.two_sum;
 
 import org.junit.Assert;
 import org.junit.Test;

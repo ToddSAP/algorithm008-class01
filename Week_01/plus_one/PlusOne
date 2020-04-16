@@ -1,4 +1,4 @@
-package _70;
+package Week_01.plus_one;
 
 import org.junit.Assert;
 import org.junit.Test;
