@@ -1,11 +1,11 @@
 package Week_01.plus_one;
 
-import org.junit.Assert;
-import org.junit.Test;
+        import org.junit.Assert;
+        import org.junit.Test;
 
-import java.math.BigDecimal;
+        import java.math.BigDecimal;
 
-public class PlusOne {
+public class Plus_One {
     /**
      * 思路:
      *      1. 暴力法：将数组转换成整形数字，加一后再转成数组,时间O(n), 空间O(n)
@@ -54,11 +54,11 @@ public class PlusOne {
         int[] digits = new int[]{1,2,3};
 
         //When And Then for brute
-        int[] result = PlusOne.plusOne_brute(digits);
+        int[] result = Plus_One.plusOne_brute(digits);
         Assert.assertArrayEquals(result, new int[]{1,2,4});
 
         //When And Then for carry
-        result = PlusOne.plusOne_carry(digits);
+        result = Plus_One.plusOne_carry(digits);
         Assert.assertArrayEquals(result, new int[]{1,2,4});
 
 
@@ -66,11 +66,11 @@ public class PlusOne {
         digits = new int[]{4,3,2,1};
 
         //When And Then for brute
-        result = PlusOne.plusOne_brute(digits);
+        result = Plus_One.plusOne_brute(digits);
         Assert.assertArrayEquals(result, new int[]{4,3,2,2});
 
         //When And Then for carry
-        result = PlusOne.plusOne_carry(digits);
+        result = Plus_One.plusOne_carry(digits);
         Assert.assertArrayEquals(result, new int[]{4,3,2,2});
 
     }
@@ -81,11 +81,11 @@ public class PlusOne {
         int[] digits = new int[]{0};
 
         //When And Then for brute
-        int[] result = PlusOne.plusOne_brute(digits);
+        int[] result = Plus_One.plusOne_brute(digits);
         Assert.assertArrayEquals(result, new int[]{1});
 
         //When And Then for carry
-        result = PlusOne.plusOne_carry(digits);
+        result = Plus_One.plusOne_carry(digits);
         Assert.assertArrayEquals(result, new int[]{1});
     }
 
@@ -95,11 +95,11 @@ public class PlusOne {
         int[] digits = new int[]{9};
 
         //When And Then for brute
-        int[] result = PlusOne.plusOne_brute(digits);
+        int[] result = Plus_One.plusOne_brute(digits);
         Assert.assertArrayEquals(result, new int[]{1,0});
 
         //When And Then for carry
-        result = PlusOne.plusOne_carry(digits);
+        result = Plus_One.plusOne_carry(digits);
         Assert.assertArrayEquals(result, new int[]{1,0});
     }
 
@@ -109,11 +109,11 @@ public class PlusOne {
         int[] digits = new int[]{7,2,8,5,0,9,1,2,9,5,3,6,6,7,3,2,8,4,3,7,9,5,7,7,4,7,4,9,4,7,0,1,1,1,7,4,0,0,9};
 
         //When And Then for brute
-        int[] result = PlusOne.plusOne_brute(digits);
+        int[] result = Plus_One.plusOne_brute(digits);
         Assert.assertArrayEquals(result, new int[]{7,2,8,5,0,9,1,2,9,5,3,6,6,7,3,2,8,4,3,7,9,5,7,7,4,7,4,9,4,7,0,1,1,1,7,4,0,1,0});
 
         //When And Then for carry
-        result = PlusOne.plusOne_carry(digits);
+        result = Plus_One.plusOne_carry(digits);
         Assert.assertArrayEquals(result, new int[]{7,2,8,5,0,9,1,2,9,5,3,6,6,7,3,2,8,4,3,7,9,5,7,7,4,7,4,9,4,7,0,1,1,1,7,4,0,1,0});
     }
 }
