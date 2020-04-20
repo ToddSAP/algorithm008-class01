@@ -8,6 +8,7 @@ public class RotateSortedArray {
      *   思路：
      *      1. 暴力法：开一个新数组，将后面n-k个元素依次放到新数组，再讲前k个元素接到新数组中即可。时间O(n),空间(n)。
      *      2. 分段交换法：先将整个数组反序，然后根据k将数组分成两部分，再分别反序即可。
+     *      3. 环替换法：因为每个元素都需要被仅移动一次,故总的元素移动步数一定等于元素总个数。利用这一特性，每次移动一个元素到最终位置，直到总移动步数等于元素个数。
      */
 
 
@@ -27,30 +28,66 @@ public class RotateSortedArray {
         if (n > 0) {
             k = k > n ? k % n : k;
             //reverse entire array
-            while (i < j) {
-                swap(nums, i++, j--);
-            }
+            reverse(nums, 0, n - 1);
 
             //reverse first n-k
-            i = 0;
-            j = k - 1;
-            while (i < j) {
-                swap(nums, i++, j--);
-            }
+            reverse(nums, 0, k - 1);
 
             //reverse last k
-            i = k;
-            j = n - 1;
-            while (i < j) {
-                swap(nums, i++, j--);
+            reverse(nums, k, n - 1);
+        }
+    }
+
+    private static void reverse(int[] nums, int i, int j) {
+        while (i < j) {
+            int tmp = nums[i];
+            nums[i++] = nums[j];
+            nums[j--] = tmp;
+        }
+    }
+
+    public static void rotate_cycle(int[] nums, int k) {
+        int n = nums.length;
+        if (n > 0) {
+            int c = 0; k = k % n;
+            for (int start = 0; c < n; start++) {
+                int current = start;
+                int preview = nums[start];
+                do {
+                    int next = (current + k) % n;
+                    int tmp = nums[next];
+                    nums[next] = preview;
+                    preview = tmp;
+                    current = next;
+                    c++;
+                } while (start != current);
             }
         }
     }
 
-    private static void swap(int[] nums, int i, int j) {
-        int tmp = nums[i];
-        nums[i] = nums[j];
-        nums[j] = tmp;
+
+    public static void rotate_cycle_test(int[] nums, int k) {
+        int n = nums.length;
+        if (n > 0) {
+            int moveCount = 0;
+            for (int startIndex = 0; moveCount < n; startIndex++) {
+                int prevVal = nums[startIndex];
+                int currIndex = startIndex;
+                int nextVal;
+                do {
+                    int nextIndex = (currIndex + k) % n;
+                    //cache next value
+                    nextVal = nums[nextIndex];
+
+                    //set preview element to right position
+                    nums[nextIndex] = prevVal;
+                    //reset current index and temporary value
+                    currIndex = nextIndex;
+                    prevVal = nextVal;
+                    moveCount++;
+                } while (startIndex != currIndex);
+            }
+        }
     }
 
     @Test
@@ -66,6 +103,16 @@ public class RotateSortedArray {
         nums = new int[]{1,2,3,4,5,6,7};
         RotateSortedArray.rotate_swap(nums, 3);
         Assert.assertArrayEquals(nums, new int[]{5,6,7,1,2,3,4});
+
+        //When And Then for cycle
+        nums = new int[]{1,2,3,4,5,6,7};
+        RotateSortedArray.rotate_cycle_test(nums, 3);
+        Assert.assertArrayEquals(nums, new int[]{5,6,7,1,2,3,4});
+
+        //When And Then for cycle
+        nums = new int[]{1,2,3,4,5,6};
+        RotateSortedArray.rotate_cycle_test(nums, 3);
+        Assert.assertArrayEquals(nums, new int[]{4,5,6,1,2,3});
     }
 
     @Test
@@ -81,6 +128,11 @@ public class RotateSortedArray {
         nums = new int[]{1,2,3,4,5,6,7};
         RotateSortedArray.rotate_swap(nums, 17);
         Assert.assertArrayEquals(nums, new int[]{5,6,7,1,2,3,4});
+
+        //When And Then for cycle
+        nums = new int[]{1,2,3,4,5,6,7};
+        RotateSortedArray.rotate_cycle(nums, 17);
+        Assert.assertArrayEquals(nums, new int[]{5,6,7,1,2,3,4});
     }
 
     @Test
@@ -95,6 +147,11 @@ public class RotateSortedArray {
         //When And Then for brute
         nums = new int[]{};
         RotateSortedArray.rotate_swap(nums, 17);
+        Assert.assertArrayEquals(nums, new int[]{});
+
+        //When And Then for brute
+        nums = new int[]{};
+        RotateSortedArray.rotate_cycle(nums, 17);
         Assert.assertArrayEquals(nums, new int[]{});
     }
 }
