@@ -119,23 +119,23 @@ public void dfs(Node root) {
             }
         ```        
           
-    - DFS：
+    - 递归:
         - 用递归也可以实现广度优先遍历，只不过有点反直觉，关键是要用`level`来识别当前层数。    
         - 针对输出要求按层归类，可使用参数`level`来初始化当前层结果集` if (result.size() == level) result.add(new ArrayList<>())`。这句代码的依据是在深度优先遍历时，层数是逐级递增的，走过一层就会加一个子结果集，那么恰好子结果集的个数比遍历过的层数少1，所以这句代码成立。  
-        - 先序遍历DFS代码：
+        - 先序遍历递归代码：
         ```java
-            public List<List<Integer>> levelOrder_dfs(TreeNode root) {
+            public List<List<Integer>> levelOrder_recurse(TreeNode root) {
                 List<List<Integer>> result = new ArrayList<>();
                 dfs1(root, 0, result);
                 return result;
             }
         
-            private void dfs1(TreeNode root, int level, List<List<Integer>> result) {
+            private void recurse(TreeNode root, int level, List<List<Integer>> result) {
                 if (root == null) return;
                 if (result.size() == level) result.add(new ArrayList<>());
                 result.get(level).add(root.val);
-                if (root.left != null) dfs1(root.left, level+1, result);
-                if (root.right != null) dfs1(root.right, level+1, result);
+                if (root.left != null) recurse(root.left, level+1, result);
+                if (root.right != null) recurse(root.right, level+1, result);
             }
         ``` 
 
