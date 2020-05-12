@@ -83,8 +83,8 @@ public void dfs(Node root) {
 ## 做题记录
 |题目类型|知识点|题目   |完成情况|完成时间|
 |-------|-----|---|-------|------|
-|实战题目|BFS|[102 二叉树的层序遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/#/description)|完成|5月11日|
-|实战题目|BFS|[433 最小基因变化](https://leetcode-cn.com/problems/minimum-genetic-mutation/#/description)|||
+|实战题目|BFS、DFS|[102 二叉树的层序遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/#/description)|完成|5月11日|
+|实战题目|BFS、DFS|[433 最小基因变化](https://leetcode-cn.com/problems/minimum-genetic-mutation/#/description)|完成|5月12日|
    
 5月11日(星期一)  
 主题：深度优先、广度优先遍历   
@@ -139,4 +139,99 @@ public void dfs(Node root) {
                 if (root.right != null) recurse(root.right, level+1, result);
             }
         ``` 
+
+[LeetCode 443. 最小基因变化](https://leetcode-cn.com/problems/minimum-genetic-mutation/)  
+- 感悟：
+    - 如果是找最少层数，BFS效率较高；如果是找其中一个结果，DFS效率较高。  
+    - 原因和BFS和DFS的遍历方式有关，BFS是水波纹式遍历，每次遍历走遍某层所有节点，DFS是打破砂锅式遍历，每次遍历会走完某路径上所有节点。  
+    
+- 意外：
+    - 在LeetCode上提交DFS代码时遇到一个bug，相同的用例，相同的DFS代码，在"执行代码"和"提交"时输出竟然不一样。
+    - 用例如下：**"AACCGGTT","AAACGGTA",["AACCGGTA","AACCGCTA","AAACGGTA"]**  
+    
+- 思路：
+    - 一开始没有思路，看了答案才意识到是一个图的路径搜索问题，可以用BFS和DFS来解决。  
+    - 开始基因序列可以看做图的起点，结束基因序列可以看做图中的某节点，基因库可以看做图的顶点集合，找最少变化次数就是在图的顶点中寻找起点和重点间的最短路径，要求是每次变化一个基因，及每次变化一个基因的顶点间才可以画边。  
+    - 把问题抽象好了就简单了，基因碱基是可枚举的，每个位置变化的可能就是碱基的个数。把每次变化后的序列都去基因库里查找，看是否是合法的顶点，是的话放入队列，表示此路可能走的通，否的话不处理，表示此路不通。  
+    - 处理队列时，遇到合法的序列，需要在基因库中将其删除，表示已处理过该顶点了，否则会导致重复处理的问题。
+        - BFS：
+            ```java
+                  public static int minMutation(String start, String end, String[] bank) {
+                      // 转换成基因序列集合，提升后续比对效率
+                      HashSet<String> geneSequences = new HashSet<>(Arrays.asList(bank));
+                      // 验证最终基因序列是否合法，当然，本题已假定必然合法，可不加
+                      if (!geneSequences.contains(end)) {
+                          return -1;
+                      }
+                      // 碱基集合
+                      char[] basePairs = new char[]{'A','C','G','T'};
+                      // 存放中间基因序列
+                      LinkedList<String> queue = new LinkedList<>();
+                      // 起始基因序列入队
+                      queue.offer(start);
+                      // 变化次数，即BFS走过的层数
+                      int step = 0;
+                      // 所有的中间序列都处理完毕，才意味着BFS走完了所有可能的路径
+                      while (!queue.isEmpty()) {
+                          // 进入下一层
+                          step++;
+                          // 一次最外层while需要把当前queue中的序列都处理掉，即处理BFS的完整的一层
+                          // 确定本次要出队多少中间序列
+                          int geneSequenceNumInQueue = queue.size();
+                          // 遍历并出队中间序列
+                          while (geneSequenceNumInQueue-- > 0) {
+                              String currGeneSequence = queue.pop();
+                              char[] genes = currGeneSequence.toCharArray();
+                              // 两层循环，替换每一位上的基因，并比对处理
+                              for (int i = 0; i < genes.length; i++) {
+                                  // 保存原始的基因
+                                  char oldGene = genes[i];
+                                  for (int j = 0; j < basePairs.length; j++) {
+                                      // 替换基因
+                                      genes[i] = basePairs[j];
+                                      String newGeneSequence = String.valueOf(genes);
+                                      // 验证新的序列是否合法
+                                      if (geneSequences.contains(newGeneSequence)) {
+                                          // 找到了最终序列
+                                          if (newGeneSequence.equals(end)) {
+                                              return step;
+                                          }
+                                          // 合法但不是最终序列，即发现了新的中间序列，加入队列
+                                          queue.offer(newGeneSequence);
+                                          // 从基因序列集合中删除，表示已访问过BFS的某顶点
+                                          geneSequences.remove(newGeneSequence);
+                                      }
+                                  }
+                                  // 恢复成原始的基因
+                                  genes[i] = oldGene;
+                              }
+                          }
+                      }
+                      return -1;
+                  }
+            ```
+        - DFS：
+            ```java
+                  static int minStep = Integer.MAX_VALUE;
+                  public static int minMutation(String start, String end, String[] bank) {
+                      dfs(new HashSet<>(), 0, start, end, bank); 
+                      return minStep == Integer.MAX_VALUE ? -1 : minStep; 
+                  }
+              
+                  private static void dfs(HashSet<String> visited, int step, String curr, String end, String[] bank) {
+                      if (curr.equals(end))  minStep = Math.min(step, minStep);
+                      for (String s : bank) {
+                          int diff = 0;
+                          for (int i = 0; i < s.length(); i++) {
+                              if (curr.charAt(i) != s.charAt(i)) diff++;  
+                              if (diff > 1) break;
+                          }
+                          if (diff == 1 && !visited.contains(s)) {
+                              visited.add(s);
+                              dfs(visited, step+1, s, end, bank);
+                              visited.remove(s);
+                          }
+                      }
+                  }
+            ```
 
