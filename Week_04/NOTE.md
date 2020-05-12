@@ -1,5 +1,5 @@
 #学习笔记
-##[算法思想](#目录)
+##算法思想
    1. 深度优先搜索(DFS)
    2. 广度优先搜索(BFS)
    3. 贪心算法
@@ -79,7 +79,7 @@ public void dfs(Node root) {
 ```
        
     
-##[做题记录](#做题记录)
+##做题记录
 |题目类型|知识点|题目   |完成情况|完成时间|
 |-------|-----|---|-------|------|
 |实战题目|BFS|[102 二叉树的层序遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/#/description)|完成|5月11日|
