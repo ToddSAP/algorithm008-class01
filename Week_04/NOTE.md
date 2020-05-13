@@ -86,6 +86,7 @@ public void dfs(Node root) {
 |实战题目|BFS、DFS|[102 二叉树的层序遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/#/description)|完成|5月11日|
 |实战题目|BFS、DFS|[433 最小基因变化](https://leetcode-cn.com/problems/minimum-genetic-mutation/#/description)|完成|5月12日|
 |作业|贪心|[860 柠檬水找零](https://leetcode-cn.com/problems/lemonade-change/description/)|完成|5月13日|
+|作业|贪心|[122 股票买卖最佳时机II](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/description/)|完成|5月13日|
    
 5月11日(星期一)  
 主题：深度优先、广度优先遍历   
