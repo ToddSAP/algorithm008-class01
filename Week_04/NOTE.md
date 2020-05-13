@@ -85,6 +85,7 @@ public void dfs(Node root) {
 |-------|-----|---|-------|------|
 |实战题目|BFS、DFS|[102 二叉树的层序遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/#/description)|完成|5月11日|
 |实战题目|BFS、DFS|[433 最小基因变化](https://leetcode-cn.com/problems/minimum-genetic-mutation/#/description)|完成|5月12日|
+|作业|贪心|[860 柠檬水找零](https://leetcode-cn.com/problems/lemonade-change/description/)|完成|5月13日|
    
 5月11日(星期一)  
 主题：深度优先、广度优先遍历   
@@ -295,5 +296,60 @@ public void dfs(Node root) {
                       }
                   }   
             ```
+5月13日(星期四)        
+主题：贪心
+技能：贪心
+
+[LeetCode 860. 柠檬水找零](https://leetcode-cn.com/problems/lemonade-change/description/)    
+- 思路:  
+    - 关键是找出找零的策略，只有3种面值，找零的方法可以穷举。
+    - 用贪心的话，高面值的分支需要些在前面。 
+    - 代码   
+        ```java
+              public boolean lemonadeChange(int[] bills) {
+                  int five = 0, ten = 0;
+                  for (int bill : bills) {
+                      if (bill == 5) five++;
+                      else if (bill == 10 && five > 0) {five--; ten++;}
+                      else if (bill == 20 && (ten > 0 && five > 0)) {five--;ten--;}
+                      else if (bill == 20 && (five >= 3)) five -=3;
+                      else return false;
+                  }
+                  return true;
+              } 
+        ```
+      
+[LeetCode 122. 买卖股票的最佳时机II](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/description/)      
+- 思路:
+    - 首先想到是DFS，找到所有赚钱的路径，然后返回赚钱最多的那个。当然，这样做相当于遍历整个递归树，在节点数量增加的情况下，需要遍历的节点数会指数增加。  
+    - 本周讲贪心，那么用贪心的思维来思考。最大化收益就是赚到每一分钱，及所有正收益。如何计算所有正收益？可以看到，正收益只发生在第二天的价格比前一天高，那么判断每两天间的价格、累加正收益就能得到总最大收益。 
+    - 递归:
+        ```java
+              static int profit = 0;
+              public static int maxProfit_dfs(int[] prices) {
+                 dfs(0, prices);
+                 return profit;
+              }
         
+              private static void dfs(int level, int[] prices) {
+                 if (level == prices.length-1) {
+                     return ;
+                 }
+        
+                 if (level+1<prices.length && prices[level] < prices[level+1]) {
+                     profit = profit + (prices[level+1] - prices[level]);
+                 }
+                 dfs(level+1, prices);
+              }
+        ```
+    - 直接遍历：
+        ```java
+              public static int maxProfit(int[] prices) {
+                  int profit = 0;
+                  for (int i = 1; i < prices.length; i++) {
+                      if (prices[i] > prices[i-1]) profit += prices[i] - prices[i-1];
+                  }
+                  return profit;
+              }   
+        ```
     
