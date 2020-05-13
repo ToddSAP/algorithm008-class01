@@ -353,4 +353,18 @@ public void dfs(Node root) {
                   return profit;
               }   
         ```
-    
+[LeetCode 455. 分发饼干](https://leetcode-cn.com/problems/assign-cookies/description/)    
+- 思路：
+    - 类似田忌赛马，最优解是尺寸最大的饼干给胃口最大的孩子。针对贪心，可以分别对小孩和饼干排序，然后再分配。
+    - 代码：
+        ```java
+              public int findContentChildren(int[] g, int[] s) {
+                  Arrays.sort(g); Arrays.sort(s);
+                  int result = 0, childNum = 0, cookieNum = 0;
+                  while (childNum < g.length && cookieNum < s.length) {
+                      if (g[childNum] <= s[cookieNum]) {cookieNum++; childNum++; result++;}
+                      else cookieNum++;
+                  }
+                  return result;
+              }  
+        ```
