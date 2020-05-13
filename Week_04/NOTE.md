@@ -298,7 +298,7 @@ public void dfs(Node root) {
                   }   
             ```
 5月13日(星期四)        
-主题：贪心
+主题：贪心  
 技能：贪心
 
 [LeetCode 860. 柠檬水找零](https://leetcode-cn.com/problems/lemonade-change/description/)    
