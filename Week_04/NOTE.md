@@ -139,6 +139,10 @@ public void dfs(Node root) {
                 if (root.right != null) recurse(root.right, level+1, result);
             }
         ``` 
+      
+5月12日(星期二)    
+主题：深度优先、广度优先遍历   
+技能：递归遍历、循环遍历
 
 [LeetCode 443. 最小基因变化](https://leetcode-cn.com/problems/minimum-genetic-mutation/)  
 - 感悟：
@@ -234,4 +238,62 @@ public void dfs(Node root) {
                       }
                   }
             ```
-
+[LeetCode 22. 括号生成](https://leetcode-cn.com/problems/generate-parentheses/#/description)
+- 思路：
+    - 抽象之后，和443题很像了，只不过本题换成了二叉树的遍历。老一套，BFS和DFS。无他，唯手熟尔。  
+    - BFS：
+        - 借助一个辅助类来存放中间状态，针对本题，就是左、右括号的剩余数量和中间状态的括号。
+            ```java
+                  public List<String> generateParenthesis(int n) {
+                      List<String> result = new ArrayList<>();
+                      if (n <= 0) return result;
+                      LinkedList<Bracket> queue = new LinkedList<>();
+                      queue.offer(new Bracket("(", n-1, n));
+                      while (!queue.isEmpty()) {
+                          Bracket curr = queue.pop();
+                          if (curr.left == 0 && curr.right == 0) result.add(curr.bracket);
+                          if (curr.left > 0) queue.offer(new Bracket(curr.bracket+"(", curr.left-1, curr.right));
+                          if (curr.right > curr.left) queue.offer(new Bracket(curr.bracket+")", curr.left, curr.right-1));
+                      }
+                      return result;
+                  } 
+          
+                  class Bracket {
+                      public int left;
+                      public int right;
+                      String bracket;
+                     
+                      public Bracket(String curr, int left, int right) {
+                          this.bracket = curr;
+                          this.left = left;
+                          this.right = right;
+                      }
+                  } 
+            ```
+    - DFS：
+        - 递归，有两种写法，一种用StringBuilder来回溯，需要恢复现场，但占用空间少；一种是每次用新String，不用恢复现场，但会创建很多中间状态String，空间占用多一些。
+            ```java
+                  public static List<String> generateParenthesis_dfs(int n) {
+                      List<String> result = new ArrayList<>();
+                      dfs(new StringBuilder(), n, n, result);
+                      return result;
+                  }
+              
+                  private static void dfs(StringBuilder curr, int left, int right, List<String> result) {
+                      if (left == 0 && right == 0) {
+                          result.add(curr.toString());
+                          return;
+                      }
+              
+                      if (left > 0) {
+                          dfs(curr.append("("), left-1, right, result);
+                          curr.deleteCharAt(curr.length()-1);
+                      }
+                      if (right > left) {
+                          dfs(curr.append(")"), left, right-1, result);
+                          curr.deleteCharAt(curr.length()-1);
+                      }
+                  }   
+            ```
+        
+    
