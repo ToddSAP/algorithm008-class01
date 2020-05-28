@@ -29,6 +29,7 @@
 |-------|-----|---|-------|------|
 |课后习题|动态规划|[62. 不同路径](https://leetcode-cn.com/problems/unique-paths/)|完成|5月27日|  
 |课后习题|动态规划|[63. 不同路径II](https://leetcode-cn.com/problems/unique-paths-ii/)|完成|5月28日|
+|作业|动态规划|[64. 最小路径和](https://leetcode-cn.com/problems/minimum-path-sum/)|||
 
 [62. 不同路径](https://leetcode-cn.com/problems/unique-paths/)  
 - 思路:  
@@ -78,7 +79,7 @@
         ```
     - 空间优化动归。利用只有一列的dp数组迭代计算。  
         - 时间复杂度: 依旧两层循环，故O(m*n)。  
-        - 空间复杂度: 如果取min(m,n)做dp数组的行数，则O(min(m,n))，否则O(max(m,n))。  
+        - 空间复杂度: 如果取min(m,n)做dp数组的行数，则O(min(m,n))，否则O(n)。  
         ```java
                 public int unique_dp_enhance(int m, int n) {
                     int j = Math.min(m, n), z = Math.max(m, n);
@@ -150,3 +151,6 @@
               } 
     ```                                               
 
+[64. 最小路径和](https://leetcode-cn.com/problems/minimum-path-sum/)
+- 思路： 
+    - 基础动归。
