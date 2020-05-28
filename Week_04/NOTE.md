@@ -81,7 +81,7 @@ public void dfs(Node root) {
        
     
 ## 做题记录
-|题目类型|知识点|题目   |完成情况|完成时间|
+|题目类型|知识点|题目   |完成情况|完``成时间|
 |-------|-----|---|-------|------|
 |实战题目|BFS、DFS|[102 二叉树的层序遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/#/description)|完成|5月11日|
 |实战题目|BFS、DFS|[433 最小基因变化](https://leetcode-cn.com/problems/minimum-genetic-mutation/#/description)|完成|5月12日|
