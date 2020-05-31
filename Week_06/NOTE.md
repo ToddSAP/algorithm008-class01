@@ -29,7 +29,7 @@
 |-------|-----|---|-------|------|
 |课后习题|动态规划|[62. 不同路径](https://leetcode-cn.com/problems/unique-paths/)|完成|5月27日|  
 |课后习题|动态规划|[63. 不同路径II](https://leetcode-cn.com/problems/unique-paths-ii/)|完成|5月28日|
-|作业|动态规划|[64. 最小路径和](https://leetcode-cn.com/problems/minimum-path-sum/)|||
+|作业|动态规划|[221. 最大正方形](https://leetcode-cn.com/problems/maximal-square/)|完成|5月30日|
 
 [62. 不同路径](https://leetcode-cn.com/problems/unique-paths/)  
 - 思路:  
@@ -153,4 +153,49 @@
 
 [64. 最小路径和](https://leetcode-cn.com/problems/minimum-path-sum/)
 - 思路： 
-    - 基础动归。
+    - 基础动归，三件套：定义状态、定义dp、找出状态转移方程。  
+    - 针对本题，目标是找最小路径和，那么状态就是每个路径点走还是不走。由于只能往右和下走，那么某路径点的dp值就是其左或上dp值中最小的那个。状态转移方程就呼之欲出了：dp[i][j] = Math.min(dp[i-1][j], dp[i][j-1]) + dp[i][j]。   
+    - 以下代码是在原有数组上迭代，故无需申请dp，时间复杂度O(m*n)，空间复杂度O(1)。  
+    - 当然，也可以申请二维dp或一维dp来做，无非是将状态放在哪里的问题，这两个代码就先不贴了，否则有凑篇幅的嫌疑。  GG 
+    ```java
+                public int minPathSum(int[][] grid) {
+                    if (grid == null || grid.length == 0) return 0;
+                    int rowNum = grid.length, colNum = grid[0].length;
+                    for (int i = 0; i < rowNum; i++) {
+                        for (int j = 0; j < colNum; j++) {
+                            if (i == 0 && j > 0) grid[i][j] += grid[i][j-1];
+                            else if (j == 0 && i > 0) grid[i][j] += grid[i-1][j];
+                            else if (i > 0 && j > 0) grid[i][j] += Math.min(grid[i-1][j], grid[i][j-1]);
+                        }
+                    }
+                    return colNum > 0 ? grid[rowNum-1][colNum-1] : 0;
+                } 
+    ```
+[最大正方形](https://leetcode-cn.com/problems/maximal-square/)
+- 思路:
+    - 第一眼感觉不知道能不能用动归来做，后来考察中看出了迭代边长可以适用动归，得到边长就等于得到面积。  
+    - 一个正方形中不能有0，即全部都是1，那么最小的正方形的右下角dp值可以记为2，以此类推，边长为3的正方形的右下角dp值是3，即它的左上角加一。好了，来动归三件套把。  
+    - 状态：有两个，某点作为边长的一部分，或不作为边长的一部分。  
+    - 最优子结构：由于正方形中全部为1，考察某点时，影响某点dp值的最小集合就是该点的上、左和左上，那么这三个点就是最优子结构。  
+    - 状态转移方程：对于临近的三个点，dp值都是代表自身作为正方形一部分时的最大边长，那么要取三者的交集才能确保还是正方形。  
+      dp[i][j] = Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1
+    - 由于求最大面积，即最大边长，可在原数组上累进。时间复杂度O(height*width)，空间复杂度O(1)。 
+    ```java
+                     public int maximalSquare(char[][] matrix) {
+                         if (matrix == null || matrix.length == 0) return 0;
+                         int rowNum = matrix.length, colNum = matrix[0].length; char maxLengthOfSide = matrix[0][0]=='1'?'1':'0';
+                         if (colNum < 1) return 0;
+                         for (int i = 0; i < rowNum; i++) {
+                             for (int j = 0; j < colNum; j++) {
+                                 if (i > 0 && j > 0 && matrix[i][j] == '1') {
+                                     matrix[i][j] = (char) ((Math.min(Math.min(matrix[i - 1][j], matrix[i][j - 1]), matrix[i - 1][j - 1])) + 1);
+                                     maxLengthOfSide = (char) Math.max(maxLengthOfSide, matrix[i][j]);
+                                 } else if (matrix[i][j] == '1') {
+                                     maxLengthOfSide = (char) Math.max(maxLengthOfSide, matrix[i][j]);
+                                 }
+                             }
+                         }
+                         return Character.getNumericValue(maxLengthOfSide)*Character.getNumericValue(maxLengthOfSide);
+                     }    
+    ```
+    
