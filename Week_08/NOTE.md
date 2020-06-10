@@ -51,6 +51,7 @@
 |课后习题|位运算|[191. 位1的个数](https://leetcode-cn.com/problems/number-of-1-bits/)|完成|6月9日|
 |课后练习|LRU|[146. LRU缓存机制](https://leetcode-cn.com/problems/lru-cache/#/)|完成|6月9日|
 |课后练习|位运算|[231. 2的幂](https://leetcode-cn.com/problems/power-of-two/)|完成|6月9日|
+|作业|位运算|[190. 颠倒二进制位](https://leetcode-cn.com/problems/reverse-bits/)|完成|6月10日|
 
 
 [146. LRU缓存机制](https://leetcode-cn.com/problems/lru-cache/#)
@@ -183,3 +184,30 @@
                               return c > 0 && cnt == 1;
                           }
     ```
+[190. 颠倒二进制位](https://leetcode-cn.com/problems/reverse-bits/)
+- 思路：
+    - 暴力法：10进制整型转成二进制字符串，遍历字符串反转，然后转成10进制整型。  
+    - 位移法：第1位左移31位，第2位左移30位，以此类推，最后将所有左移值求和。  
+    - 加强位移法：利用分治思想，先将前16位和后16位整体交换，再将两个16位块中的前后8位交换，以此类推，直到全部交换。  
+    ```java
+                      public int reverseBits(int n) {
+                          int sum = 0;
+                          for (int i = 0; i < 32; i++)
+                              sum += ((n >> i) & 1) << (31-i);
+                          return sum;
+                      }
+    ```
+    ```java
+                      public int reverseBits(int n) {
+                          n = (n >> 16) | (n << 16);
+                          n = ((n & 0xff00ff00) >> 8) | ((n & 0x00ff00ff) << 8);
+                          n = ((n & 0xf0f0f0f0) >> 4) | ((n & 0x0f0f0f0f) << 4);
+                          n = ((n & 0xcccccccc) >> 2) | ((n & 0x33333333) << 2);
+                          n = ((n & 0xaaaaaaaa) >> 1) | ((n & 0x55555555) << 1);
+                          return n;
+                      }                   
+    ```
+  
+[排序算法练手](https://www.google.com)
+#### 插入排序
+
