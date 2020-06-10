@@ -50,7 +50,7 @@
 |-------|-----|---|-------|------|
 |课后习题|位运算|[191. 位1的个数](https://leetcode-cn.com/problems/number-of-1-bits/)|完成|6月9日|
 |课后练习|LRU|[146. LRU缓存机制](https://leetcode-cn.com/problems/lru-cache/#/)|完成|6月9日|
-|课后练习|为运算|[231. 2的幂](https://leetcode-cn.com/problems/power-of-two/)|完成|6月9日|
+|课后练习|位运算|[231. 2的幂](https://leetcode-cn.com/problems/power-of-two/)|完成|6月9日|
 
 
 [146. LRU缓存机制](https://leetcode-cn.com/problems/lru-cache/#)
