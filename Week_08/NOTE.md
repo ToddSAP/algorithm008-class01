@@ -52,6 +52,7 @@
 |课后练习|LRU|[146. LRU缓存机制](https://leetcode-cn.com/problems/lru-cache/#/)|完成|6月9日|
 |课后练习|位运算|[231. 2的幂](https://leetcode-cn.com/problems/power-of-two/)|完成|6月9日|
 |作业|位运算|[190. 颠倒二进制位](https://leetcode-cn.com/problems/reverse-bits/)|完成|6月10日|
+|作业|排序|十大排序算法练手|完成|6月12日|
 
 
 [146. LRU缓存机制](https://leetcode-cn.com/problems/lru-cache/#)
@@ -210,22 +211,149 @@
   
 [排序算法练手](https://www.google.com)
 #### 选择排序
+ - 每次选择待排序区中最小元素，插入已排序区末尾。  
+ - 需要注意的是，因为每次要把待排序区首个元素交换到最小元素的位置,所以选择排序是不稳定的。     
 ```java
     public static int[] order(int[] nums) {
+        if (nums == null || nums.length == 0) return nums;
         for (int i = 0; i < nums.length; i++) {
             int minIndex = i;
-            for (int j = i; j < nums.length; j++) {
-                if (nums[minIndex] > nums[j]) {
-                    minIndex = j;
-                }
-            }
-            int tmp = nums[i];
-            nums[i] = nums[minIndex];
-            nums[minIndex] = tmp;
+            for (int j = i; j < nums.length; j++)
+                if (nums[minIndex] > nums[j]) minIndex = j;
+            int tmp = nums[i]; nums[i] = nums[minIndex]; nums[minIndex] = tmp;
         }
         return nums;
     }
 ```
 
 #### 插入排序
+ - 对于元素的移动有三种策略：每次相邻元素swap、每次只移动大于target的元素、System.arraycopy批量移动。在数据规模大的场景下，第三种策略显然效率更高。
+```java
+    public static int[] order_enhance1(int[] nums) {
+        if (nums == null || nums.length == 0) return nums;
+        for (int i = 1; i < nums.length; i++) {
+            int targetIndex = i, currValue = nums[i];
+            for (int j = i; j > 0; j--)
+                if (nums[j-1] > currValue) targetIndex--;
+                else break;
+            System.arraycopy(nums, targetIndex, nums, targetIndex+1, i-targetIndex);
+            nums[targetIndex] = currValue;
+        }
+        return nums;
+    }
+```
+
+#### 冒泡排序
+ - 可以加一个标志位来跳过不必要的比对。  
+```java
+    public static int[] order(int[] nums) {
+        if (nums == null || nums.length == 0) return nums;
+        for (int i = 0; i < nums.length; i++) {
+            boolean hasSwap = false;
+            for (int j = 0; j < nums.length - i - 1; j++) {
+                if (nums[j] > nums[j+1]) {
+                    int tmp = nums[j];
+                    nums[j] = nums[j+1];
+                    nums[j+1] = tmp;
+                    hasSwap = true;
+                }
+            }
+            if (!hasSwap) break;
+        }
+        return nums;
+    }
+```
+
+#### 希尔排序
+ - 关键是增量间隔要设置好，目前已知最佳的值是n/3+1。  
+ - 关于内存循环，有两种遍历方向，从前往后和从后往前。我把两种都实现了，个人感觉后者更顺一些，在判断边界时考虑的点更自然。  
+```java
+    public static int[] order(int[] nums) {
+       if (nums == null || nums.length == 0) return nums;
+       int gap = nums.length, n = nums.length;
+       
+       while (gap > 1) {
+           gap = gap / 3 + 1;
+           boolean hasSwap = false;
+
+           for (int i = 0; i + gap < n; i++) {
+               // 从前往后遍历
+               for (int j = i; j + gap < n; j += gap) {
+                   if (nums[j + gap] < nums[j]) {
+                       int tmp = nums[j];
+                       nums[j] = nums[j + gap];
+                       nums[j + gap] = tmp;
+                       hasSwap = true;
+                   }
+               }
+           }
+
+           if (!hasSwap) return nums;
+       }
+
+       return nums;
+    }
+
+    public static int[] order1(int[] nums) {
+        if (nums == null || nums.length <= 1) return nums;
+        int gap = nums.length, n = nums.length;
+        while (gap > 1) {
+            gap = gap / 3 + 1;
+            for (int i = n - 1; i > 0; i--)
+                // 从后往前遍历
+                for (int j = i; j - gap >= 0 ; j -= gap) {
+                    int tmp;
+                    if (nums[j - gap] > nums[j]) {
+                        // swap
+                        tmp = nums[j - gap];
+                        nums[j - gap] = nums[j];
+                        nums[j] = tmp;
+                    }
+                }
+        }
+        return nums;
+    }
+```
+
+#### 归并排序
+ - 反复利用一个初始化好的数组可以将空间复杂度降到O(n)。  
+```java
+    public static int[] order (int[] nums) {
+        if (nums == null || nums.length <= 1) return nums;
+        sort(nums, 0, nums.length-1, new int[nums.length]);
+        return nums;
+    }
+
+    private static void sort (int[] nums, int start, int end, int[] workspace) {
+        int mid;
+        if (start < end) {
+            mid = (start + end) >>> 1;
+            sort(nums, start, mid, workspace);
+            sort(nums, mid + 1, end, workspace);
+            merge(nums, start, mid, mid + 1, end, workspace);
+        }
+    }
+
+    private static void merge (int[] nums, int start1, int end1, int start2, int end2, int[] workspace) {
+        int k = 0, i = start1, j = start2;
+        while (i <= end1 && j <= end2)
+            if (nums[i] > nums[j]) workspace[k++] = nums[j++];
+            else workspace[k++] = nums[i++];
+        while (i <= end1) workspace[k++] = nums[i++];
+        while (j <= end2) workspace[k++] = nums[j++];
+        System.arraycopy(workspace, 0, nums, start1, end2-start1+1);
+    }
+
+
+    @Test
+    public void test_practices () {
+        int[] result = MergeSort.order(ArrayUtils.getTestingArrayWithNonDuplicates());
+        Assert.assertArrayEquals(ArrayUtils.getExpectedResultWithNonDuplicates(), result);
+
+        result = MergeSort.order(ArrayUtils.getTestingArrayWithDuplicates());
+        Assert.assertArrayEquals(ArrayUtils.getExpectedResultWithDuplicates(), result);
+    }
+```
+
+#### 快速排序
 
