@@ -30,6 +30,7 @@
 |作业|字符串操作|[709. 转换成小写字母](https://leetcode-cn.com/problems/to-lower-case/)|完成|6月16日|
 |作业|字符串操作|[58. 最后一个单词的长度](https://leetcode-cn.com/problems/length-of-last-word/)|完成|6月16日|
 |作业|字符串操作|[771. 宝石与石头](https://leetcode-cn.com/problems/jewels-and-stones/)|完成|6月16日|
+|作业|字符串操作|[387. 字符串中第一个唯一字符](https://leetcode-cn.com/problems/first-unique-character-in-a-string/)|完成|6月16日|
 
 
 [709. 转换成小写字母](https://leetcode-cn.com/problems/to-lower-case/)  
@@ -86,4 +87,20 @@
              return n;
          } 
     ```
+[387. 字符串中第一个唯一字符](https://leetcode-cn.com/problems/first-unique-character-in-a-string/)  
+- 思路：
+    - 暴力+Hash法：用Hash表里做每个字符出现次数的记录，两次遍历字符串，第一次制作Hash表，第二次找到第一个值为1的即为结果。  
+        - 时间复杂度：O(n)，空间复杂度O(n)。  
+    - 暴力+数组法：因为本题可枚举，用字符数组替代hash表，可提升效率。  
+        - 时间复杂度：O(n)，空间复杂度O(n)。  
+    ```java
+         public int findUniqueChar (String s) {
+             if (s == null || s.length() == 0) return -1;
+             int[] chars = new int[256];
+             for (int i = 0; i < s.length(); i++) chars[s.charAt(i)]++;
+             for (int i = 0; i < s.length(); i++) if (chars[s.charAt(i)] == 1) return i;
+             return -1;
+         } 
+    ```
+        
 
