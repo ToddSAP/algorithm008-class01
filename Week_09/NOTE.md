@@ -31,6 +31,8 @@
 |作业|字符串操作|[58. 最后一个单词的长度](https://leetcode-cn.com/problems/length-of-last-word/)|完成|6月16日|
 |作业|字符串操作|[771. 宝石与石头](https://leetcode-cn.com/problems/jewels-and-stones/)|完成|6月16日|
 |作业|字符串操作|[387. 字符串中第一个唯一字符](https://leetcode-cn.com/problems/first-unique-character-in-a-string/)|完成|6月16日|
+|作业|字符串操作|[8. 字符串转换整数](https://leetcode-cn.com/problems/string-to-integer-atoi/)|完成|6月16日|
+|作业|字符串操作|[344. 反转字符串](https://leetcode-cn.com/problems/reverse-string/)|完成|6月20日|
 
 
 [709. 转换成小写字母](https://leetcode-cn.com/problems/to-lower-case/)  
@@ -103,4 +105,46 @@
          } 
     ```
         
+[8. 字符串转换整数](https://leetcode-cn.com/problems/string-to-integer-atoi/)  
+- 思路: 
+    - 先trim，再判断首字符是否正、负号，再判断后续的字符是否有效，再截取有效字符，最后转换成整数。  
+    - 有即可坑需要注意：
+        - trim完了之后需要马上判空，不然取符号位会数组越界
+        - 溢出判断非常必要，但要写好并不容易，很容易写错或冗长。看了别人的代码，发现这个办法很不错，原理是sum*10+digit是当前结果，但如果真的算出来溢出的话会变成负数，不好和Integer.MAX_VALUE做比较，那么可以变换不等式，变成(Integer.MAX_VALUE-digit)/10 >= sum，这样就不会溢出了。  
+    ```java
+          public int myAtoi(String str) {
+             if (str == null || str.length() == 0) return 0;
+             int start = 0;
+             // trim前部
+             for (int i = 0; i < str.length(); i++) if (str.charAt(i) == ' ') start++; else break;
+             if (start == str.length()) return 0;
+             boolean isPositive = true;
+             int validStrStart = start, validStrEnd = start;
+             // 判断符号
+             if (str.charAt(start) == '-') {
+                 isPositive = false;
+                 validStrStart++; validStrEnd++;
+             } else if (str.charAt(start) == '+') {
+                 validStrStart++; validStrEnd++;
+             } else if (str.charAt(start) < '0' || str.charAt(start) > '9') {
+                 return 0;
+             }
+             // 截取有效数字
+             for (int i = validStrStart; i < str.length(); i++) {
+                 // 遇到无效数字
+                 if (str.charAt(i) < '0' || str.charAt(i) > '9') break;
+                 else validStrEnd++;
+             }
+             // 处理数字
+             int result = 0, digit;
+             for (int i = validStrStart; i < validStrEnd; i++) {
+                 digit = str.charAt(i)-'0';
+                 if ((Integer.MAX_VALUE - digit) / 10 < result) return isPositive ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+                 result = result*10 + digit;
+             }
+             return isPositive ? result : -result;
+         } 
+    ```
+ 
+[344. 反转字符串](https://leetcode-cn.com/problems/reverse-string/)
 
